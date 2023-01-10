@@ -5,12 +5,20 @@ import requests
 from pycoingecko import CoinGeckoAPI
 import datetime
 
+# DISCLAIMER:
+# You are solely responsible for ensuring the secure configuration and operation of this script, including but not limited to protecting it from unauthorized access by third parties.
+# Failure to do so may result in the loss of your private keys, XENFTs or other cryptocurrencies stored in your account. You should exercise caution and only run this script on a secure workstation or server.
+# By using this script, you acknowledge that you understand the inherent risks associated with running this script for the purposes of creating XENFTs, and that you agree to use this script at your own risk.
+# The creator of this script will not be held liable for any damages, loss of funds, or other negative consequences that may result from you or any third party using this script.
+# You are solely responsible for any actions taken using this script, and for securing your private keys and other sensitive information.
+# This script is provided 'as is,' and the creator makes no warranty, express or implied, of any kind.
+
 
 ## ----------- CONFIG START ----------- ##
 
 # Set the XENFT parameters
 vmu = 128 # How many VMUs to mint?
-manual_max_term = 442  # Hardcoded max term for your XENFT
+manual_max_term = 443  # Hardcoded max term for your XENFT
 
 # if TRUE script will automatically return max term and overwrite above manual_max_term value.
 # If FALSE, script will default to manually configured value (manual_max_term)
@@ -18,10 +26,10 @@ use_automatic_max_term = True
 
 # Set gas-related claiming parameters
 only_claim_if_gas_is_below = 14
-max_priority_fee_per_gas = 1
+max_priority_fee_per_gas = 1.1
 
 # Claim/Mint parameters
-claim_when_consecutive_count = 3 # if n checks in a row are at below OnlyClaimIfGasBelow, only then claim it
+claim_when_consecutive_count = 3  # if n checks in a row are at below OnlyClaimIfGasBelow, only then claim it
 how_many_seconds_between_checks = 10
 
 # Infura URL. Note: All requests to Infura must have a valid API key appended to the request URL or they will fail.
@@ -37,6 +45,10 @@ your_wallet_address_private_key = '012345abcdef...' # private key of your wallet
 # XENFT & XEN smart contract addresses (DON'T TOUCH)
 xenft_contract_address = web3.toChecksumAddress('0x0a252663dbcc0b073063d6420a40319e438cfa59')
 xen_public_address = web3.toChecksumAddress('0x06450dEe7FD2Fb8E39061434BAbCFC05599a6Fb8')
+
+# Time Format
+now = datetime.datetime.now()
+time_format = f"{now.year}-{now.month:02}-{now.day:02} {now.hour:02}:{now.minute:02}:{now.second:02}"
 
 ## ------------ CONFIG END ------------ ##
 
@@ -81,7 +93,7 @@ def get_gas_price():
 
     # Calculate low, medium, and high gas prices
 
-    medium_gas_price_gwei = gas_price_gwei
+    medium_gas_price_gwei = gas_price_gwei * 1.1  # low gwei price + 10%
     return round(medium_gas_price_gwei, 2)
 
 ## ----------- FUNCTIONS END ----------- ##
@@ -95,8 +107,10 @@ if use_automatic_max_term:
     term = fetch_current_max_term(xen_public_address) # This will fetch the current MAX TERM automatically from XEN smart contract.
 else:
     term = manual_max_term
-
-print(f"XENFT CONFIGURATION: VMU: {vmu}, TERM: {term}, Max Gwei: {only_claim_if_gas_is_below}")
+print("------------------------------------------ XENFT CONFIGURATION ------------------------------------------")
+print(f"VMU: {vmu}, TERM: {term}, Max Gas Fee (gwei): {only_claim_if_gas_is_below}, Max Priority Fee (gwei) : {max_priority_fee_per_gas}, Auto retrieve Max Term: {use_automatic_max_term}")
+print(f"Auto-claim XENFT when gas drops below {only_claim_if_gas_is_below} gwei for {claim_when_consecutive_count} consecutive checks, performed at {how_many_seconds_between_checks} second intervals.")
+print("---------------------------------------------------------------------------------------------------------")
 
 # Retrieve XENFT ABI from the smart contract
 time.sleep(how_many_seconds_between_checks)
@@ -112,14 +126,15 @@ while True:
     if maxFeePerGas > only_claim_if_gas_is_below:
         consecutive_count = 0
         now = datetime.datetime.now()
-        print(f"{now.year}-{now.month:02}-{now.day:02} {now.hour:02}:{now.minute:02}:{now.second:02} - Waiting for gas price to drop to {only_claim_if_gas_is_below}. The current gas price: {maxFeePerGas}")
+        print(f"{time_format} - Waiting for gas price to drop to {only_claim_if_gas_is_below}. The current gas price: {maxFeePerGas}")
         time.sleep(how_many_seconds_between_checks)
     else:
         consecutive_count += 1
-        print(f"Test {consecutive_count} of {claim_when_consecutive_count} - Gas is below {only_claim_if_gas_is_below}  gwei ({maxFeePerGas})")
+        now = datetime.datetime.now()
+        print(f"{time_format} - Test {consecutive_count} of {claim_when_consecutive_count} - Gas is below {only_claim_if_gas_is_below}  gwei ({maxFeePerGas})")
         if consecutive_count == claim_when_consecutive_count:
             # Once gas at acceptable range, move ahead with transactions
-            print(f"Ready to claim, the gas price was below {only_claim_if_gas_is_below} gwei for {claim_when_consecutive_count} consecutive times!")
+            print(f"Ready to claim, the gas price is below {only_claim_if_gas_is_below} gwei for {claim_when_consecutive_count} consecutive times!")
             break
         else:
             time.sleep(how_many_seconds_between_checks)
@@ -130,50 +145,58 @@ total_account_value = round(eth_cost_in_usd*balance_before_claim,2)
 print(f"Account balance before XENFT claim: {balance_before_claim} ETH (${total_account_value})")
 
 # Build the transaction
-tx = contract.functions.bulkClaimRank(vmu, term).buildTransaction({
-    'from': your_wallet_address,
-    'nonce': web3.eth.getTransactionCount(web3.toChecksumAddress(your_wallet_address)),
-    'maxFeePerGas': web3.toWei(maxFeePerGas, 'gwei'),
-    'maxPriorityFeePerGas': web3.toWei(max_priority_fee_per_gas, 'gwei')
-})
-gas = web3.eth.estimateGas(tx)
-tx['gas'] = gas
+try:
+    tx = contract.functions.bulkClaimRank(vmu, term).buildTransaction({
+        'from': your_wallet_address,
+        'nonce': web3.eth.getTransactionCount(web3.toChecksumAddress(your_wallet_address)),
+        'maxFeePerGas': web3.toWei(maxFeePerGas, 'gwei'),
+        'maxPriorityFeePerGas': web3.toWei(max_priority_fee_per_gas, 'gwei')
+    })
+    gas = web3.eth.estimateGas(tx)
+    tx['gas'] = gas
+    print("Transaction built successfully!")
 
+    if web3.eth.getBalance(your_wallet_address) < gas*maxFeePerGas:
+        raise Exception("Not enough Ether in your wallet address to pay for the transaction")
 
-# Estimate Cost
-gas_price = web3.toWei(maxFeePerGas, 'gwei')
-cost = gas * gas_price
-cost_in_ether = float(round(web3.fromWei(cost, 'ether'),6))
-total_cost_in_usd = round(cost_in_ether * eth_cost_in_usd,2)
-per_vmu_cost = round(total_cost_in_usd/vmu,2)
-print(f"Current ETH value: ${eth_cost_in_usd}")
-print(f"Expected XENFT Cost: {cost_in_ether} ETH (${total_cost_in_usd}) or ${per_vmu_cost}/VMU.")
+    # Estimate Cost
+    gas_price = web3.toWei(maxFeePerGas, 'gwei')
+    cost = gas * gas_price
+    cost_in_ether = float(round(web3.fromWei(cost, 'ether'),6))
+    total_cost_in_usd = round(cost_in_ether * eth_cost_in_usd,2)
+    per_vmu_cost = round(total_cost_in_usd/vmu,2)
+    print(f"{time_format} - Current ETH value: ${eth_cost_in_usd}")
+    print(f"{time_format} - Expected XENFT Cost: {cost_in_ether} ETH (${total_cost_in_usd}) or ${per_vmu_cost}/VMU.")
 
-# Sign the transaction with your private key
-signed_tx = web3.eth.account.signTransaction(tx, your_wallet_address_private_key)
+    # Sign the transaction with your private key
+    signed_tx = web3.eth.account.signTransaction(tx, your_wallet_address_private_key)
 
-# Send the transaction to XENFT Smart Contract
-tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
+    # Send the transaction to XENFT Smart Contract
+    tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
 
-# Print transaction hash URL
-print(f"XENFT (vmu:{vmu}, term:{term}) - Successfully Initiated at {maxFeePerGas} gwei. URL: https://etherscan.io/tx/" + str(web3.toHex(tx_hash)))
+    # Print transaction hash URL
+    print(f"{time_format} - XENFT (vmu:{vmu}, term:{term}) - Successfully Initiated at {maxFeePerGas} gwei. URL: https://etherscan.io/tx/" + str(web3.toHex(tx_hash)))
 
-# Wait for the transaction to be mined
-tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
+    # Wait for the transaction to be mined
+    # tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
 
-test_count = 0
-while web3.eth.getBalance(your_wallet_address) == balance_before_claim:
-    test_count = test_count + 1
-    print(f"Waiting for the transaction to be processed! Test: #{test_count}")
-    time.sleep(how_many_seconds_between_checks)
+    test_count = 0
+    while round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6) == balance_before_claim:
+        test_count = test_count + 1
+        now = datetime.datetime.now()
+        print(f"{time_format} - Waiting for the transaction to be processed! Test: #{test_count}")
+        time.sleep(how_many_seconds_between_checks+20)
 
-balance_after_claim = round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6)
+    balance_after_claim = round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6)
+    now = datetime.datetime.now()
+    print(f"{time_format} - XENFT (vmu:{vmu}, term:{term}) - Successfully Created at {maxFeePerGas} gwei. URL: https://etherscan.io/tx/" + str(web3.toHex(tx_hash)))
+    total_cost = float(round(balance_before_claim - balance_after_claim, 4))
+    total_cost_in_usd = round((total_cost * eth_cost_in_usd),2)
+    per_vmu_cost = round(total_cost_in_usd/vmu, 2)
+    print(f"Actual (final) XENFT Cost: {total_cost} ETH (${total_cost_in_usd}) or ${per_vmu_cost}/VMU. Calculated based on ETH value: ${eth_cost_in_usd} as of {time_format}")
+    print("-----------------------------------")
 
-print(f"XENFT (vmu:{vmu}, term:{term}) - Successfully Created at {maxFeePerGas} gwei. URL: https://etherscan.io/tx/" + str(web3.toHex(tx_hash)))
-total_cost = float(round(balance_before_claim - balance_after_claim, 4))
-total_cost_in_usd = round((total_cost * eth_cost_in_usd),2)
-per_vmu_cost = round(total_cost_in_usd/vmu, 2)
-print(f"Actual XENFT Cost: {total_cost} ETH (${total_cost_in_usd}) or ${per_vmu_cost}/VMU. Current ETH value: ${eth_cost_in_usd}")
-print("-----------------------------------")
+    ## ----------- BODY OF THE PROGRAM - END ----------- ##
 
-## ----------- BODY OF THE PROGRAM - END ----------- ##
+except Exception as e:
+    print(f"An error occurred: {e}")
