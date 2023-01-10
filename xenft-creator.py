@@ -38,7 +38,7 @@ rpc_url = "https://mainnet.infura.io/v3/ABCDEF" # Replace ABCDEF with your Infur
 # Alternatively, if you don't want to sign up with Infura and monitor your own requests, just uncomment the line below to use Public Ethereum RPC, or get one from: https://llamanodes.com/public-rpc
 # rpc_url = "https://eth.llamarpc.com"
 
-# Connect to the Ethereum network using Infura using WEB3 (DON'T TOUCH)
+# Connect to the Ethereum network through RPC using WEB3 (DON'T TOUCH)
 web3 = Web3(Web3.HTTPProvider(rpc_url))
 
 # Replace these with your own wallet details
