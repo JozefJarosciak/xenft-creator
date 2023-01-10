@@ -1,9 +1,10 @@
 import time
-from web3 import Web3
 import json
-import requests
-from pycoingecko import CoinGeckoAPI
 import datetime
+import requests
+from web3 import Web3
+import getpass
+from pycoingecko import CoinGeckoAPI
 
 # DISCLAIMER:
 # You are solely responsible for ensuring the secure configuration and operation of this script, including but not limited to protecting it from unauthorized access by third parties.
@@ -43,7 +44,12 @@ web3 = Web3(Web3.HTTPProvider(rpc_url))
 
 # Replace these with your own wallet details
 your_wallet_address = '0x' # replace with the account from which we'll pay for XENFT (ensure you have sufficient funds)
-your_wallet_address_private_key = '012345abcdef...' # replace with a private key of your wallet address
+
+# PRIVATE KEYS
+# RECOMMENDED APPROACH: Script will ask you to enter the private key manually (at runtime)
+your_wallet_address_private_key = getpass.getpass(prompt="Please enter your wallet private key: ")
+# NOT SECURE & NOT RECOMMENDED: Uncomment the following line to hardcode your wallet's private key
+# your_wallet_address_private_key = '012345abcdef...'
 
 # XENFT & XEN smart contract addresses (DON'T TOUCH)
 xenft_contract_address = web3.toChecksumAddress('0x0a252663dbcc0b073063d6420a40319e438cfa59')
