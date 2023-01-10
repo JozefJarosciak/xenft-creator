@@ -26,7 +26,7 @@ how_many_seconds_between_checks = 10
 
 # Infura URL. Note: All requests to Infura must have a valid API key appended to the request URL or they will fail.
 # Get your own at: https://infura.io (Video Guide: https://youtu.be/R2WkpF4Em7k)
-infura_url = "https://mainnet.infura.io/v3/ABCDEF # Replace ABCDEF with your Infura API id
+infura_url = "https://mainnet.infura.io/v3/ABCDEF" # Replace ABCDEF with your Infura API id
 # Connect to the Ethereum network using Infura using WEB3 (DON'T TOUCH)
 web3 = Web3(Web3.HTTPProvider(infura_url))
 
