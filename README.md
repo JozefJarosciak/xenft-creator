@@ -25,4 +25,4 @@ For more details about how to operate the script, visit: https://xen.pub/mint-co
 - **Coders**: Please enhance the below script! Nothing would make me happier than seeing this script being adopted and enhanced by the community.
 
 # LICENSE
-The code is available under the **MIT license**
+The code is available under the **MIT license** - https://github.com/JozefJarosciak/xenft-creator/blob/main/LICENSE
