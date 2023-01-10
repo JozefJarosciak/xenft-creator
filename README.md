@@ -12,7 +12,7 @@ This script is provided 'as is,' and the creator makes no warranty, express or i
 For more details about how to operate the script, visit: https://xen.pub/mint-collector-xenfts-at-the-lowest-gwei-with-this-python-code/
 
 - script name    : xenft-creator.py
-- author         : Jozef Jarosciak (Twitter: @jarosciak)
+- author         : Jozef Jarosciak (Twitter: https://twitter.com/jarosciak)
 - first released : 2023-JAN-09
 - execute        : python.exe xenft-creator.py (Use IDE it's much easier)
 - python vs      : Tested with Python 3.9
