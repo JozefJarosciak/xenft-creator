@@ -3,20 +3,21 @@ from web3 import Web3
 import json
 import requests
 from pycoingecko import CoinGeckoAPI
+import datetime
 
 
 ## ----------- CONFIG START ----------- ##
 
 # Set the XENFT parameters
 vmu = 128 # How many VMUs to mint?
-manual_max_term = 440  # Hardcoded max term for your XENFT
+manual_max_term = 442  # Hardcoded max term for your XENFT
 
 # if TRUE script will automatically return max term and overwrite above manual_max_term value.
 # If FALSE, script will default to manually configured value (manual_max_term)
 use_automatic_max_term = True
 
 # Set gas-related claiming parameters
-only_claim_if_gas_is_below = 15
+only_claim_if_gas_is_below = 14
 max_priority_fee_per_gas = 1
 
 # Claim/Mint parameters
@@ -110,7 +111,8 @@ while True:
     maxFeePerGas = get_gas_price()
     if maxFeePerGas > only_claim_if_gas_is_below:
         consecutive_count = 0
-        print(f"Waiting for gas price to drop to {only_claim_if_gas_is_below}. The current gas price: {maxFeePerGas}")
+        now = datetime.datetime.now()
+        print(f"{now.year}-{now.month:02}-{now.day:02} {now.hour:02}:{now.minute:02}:{now.second:02} - Waiting for gas price to drop to {only_claim_if_gas_is_below}. The current gas price: {maxFeePerGas}")
         time.sleep(how_many_seconds_between_checks)
     else:
         consecutive_count += 1
