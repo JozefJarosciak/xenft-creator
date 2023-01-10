@@ -25,22 +25,25 @@ manual_max_term = 443  # Hardcoded max term for your XENFT
 use_automatic_max_term = True
 
 # Set gas-related claiming parameters
-only_claim_if_gas_is_below = 14
+only_claim_if_gas_is_below = 13
 max_priority_fee_per_gas = 1.1
 
 # Claim/Mint parameters
 claim_when_consecutive_count = 3  # if n checks in a row are at below OnlyClaimIfGasBelow, only then claim it
 how_many_seconds_between_checks = 10
 
-# Infura URL. Note: All requests to Infura must have a valid API key appended to the request URL or they will fail.
+# For RPC node you can use Infura URL. Note: All requests to Infura must have a valid API key appended to the request URL or they will fail.
 # Get your own at: https://infura.io (Video Guide: https://youtu.be/R2WkpF4Em7k)
-infura_url = "https://mainnet.infura.io/v3/ABCDEF" # Replace ABCDEF with your Infura API id
+rpc_url = "https://mainnet.infura.io/v3/ABCDEF" # Replace ABCDEF with your Infura API id
+# Alternatively, if you don't want to sign up with Infura and monitor your own requests, just uncomment the line below to use Public Ethereum RPC, or get one from: https://llamanodes.com/public-rpc
+# rpc_url = "https://eth.llamarpc.com"
+
 # Connect to the Ethereum network using Infura using WEB3 (DON'T TOUCH)
-web3 = Web3(Web3.HTTPProvider(infura_url))
+web3 = Web3(Web3.HTTPProvider(rpc_url))
 
 # Replace these with your own wallet details
-your_wallet_address = '0x' # account from which we'll pay for XENFT (ensure you have sufficient funds)
-your_wallet_address_private_key = '012345abcdef...' # private key of your wallet address
+your_wallet_address = '0x' # replace with the account from which we'll pay for XENFT (ensure you have sufficient funds)
+your_wallet_address_private_key = '012345abcdef...' # replace with a private key of your wallet address
 
 # XENFT & XEN smart contract addresses (DON'T TOUCH)
 xenft_contract_address = web3.toChecksumAddress('0x0a252663dbcc0b073063d6420a40319e438cfa59')
@@ -78,12 +81,12 @@ def fetch_current_max_term(xen_address):
 
 
 def get_gas_price():
-    # Create a session with the infura API
+    # Create a session with the RPC API
     session = requests.Session()
     session.headers.update({'Content-Type':'application/json'})
 
-    # Infura connection URL
-    connection_url = infura_url
+    # RPC connection URL
+    connection_url = rpc_url
 
     # Request the gas price from the API
     gas_price_data = session.post(url=connection_url, json={"jsonrpc":"2.0","method":"eth_gasPrice","params":[],"id":1})
@@ -143,6 +146,7 @@ eth_cost_in_usd = get_eth_usd_value()
 balance_before_claim = round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6)
 total_account_value = round(eth_cost_in_usd*balance_before_claim,2)
 print(f"Account balance before XENFT claim: {balance_before_claim} ETH (${total_account_value})")
+
 
 # Build the transaction
 try:
