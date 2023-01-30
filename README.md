@@ -1,6 +1,6 @@
 # XENFT Creator
 Use this Python code to mint XENFTs at the lowest possible gwei, saving you money on Ethereum transaction fees.
-Now supports claming of multiple XENFTs at the time.
+Now supports minting of multiple XENFTs at the time.
 
 # DISCLAIMER:
 You are solely responsible for ensuring the secure configuration and operation of this script, including but not limited to protecting it from unauthorized access by third parties. Failure to do so may result in the loss of your private keys, XENFTs or other cryptocurrencies stored in your account. You should exercise caution and only run this script on a secure workstation or server.
