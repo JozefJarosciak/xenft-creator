@@ -20,7 +20,8 @@ from pycoingecko import CoinGeckoAPI
 
 # Set the XENFT parameters
 vmu = 128 # How many VMUs to mint?
-manual_max_term = 443  # Hardcoded max term for your XENFT
+manual_max_term = 444  # Hardcoded max term for your XENFT
+num_of_xenft_to_mint = 1 # Number of XENFTs to mint
 
 # if TRUE script will automatically return max term and overwrite above manual_max_term value.
 # If FALSE, script will default to manually configured value (manual_max_term)
@@ -54,7 +55,7 @@ your_wallet_address_private_key = getpass.getpass(prompt="Please enter your wall
 
 # XENFT & XEN smart contract addresses (DON'T TOUCH)
 xenft_contract_address = web3.toChecksumAddress('0x0a252663dbcc0b073063d6420a40319e438cfa59')
-xen_public_address = web3.toChecksumAddress('0x06450dEe7FD2Fb8E39061434BAbCFC05599a6Fb8')
+xen_contract_address = web3.toChecksumAddress('0x06450dEe7FD2Fb8E39061434BAbCFC05599a6Fb8')
 
 # ABI
 xenft_abi = '[{"inputs":[{"internalType":"address","name":"xenCrypto_","type":"address"},{"internalType":"uint256[]","name":"burnRates_","type":"uint256[]"},{"internalType":"uint256[]","name":"tokenLimits_","type":"uint256[]"},{"internalType":"uint256","name":"startBlockNumber_","type":"uint256"},{"internalType":"address","name":"forwarder_","type":"address"},{"internalType":"address","name":"royaltyReceiver_","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"operator","type":"address"}],"name":"OperatorNotAllowed","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":false,"internalType":"address","name":"to","type":"address"}],"name":"EndTorrent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"xenContract","type":"address"},{"indexed":true,"internalType":"address","name":"tokenContract","type":"address"},{"indexed":false,"internalType":"uint256","name":"xenAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"tokenAmount","type":"uint256"}],"name":"Redeemed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"count","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"term","type":"uint256"}],"name":"StartTorrent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[],"name":"AUTHORS","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"BLACKOUT_TERM","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"COMMON_CATEGORY_COUNTER","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"LIMITED_CATEGORY_TIME_THRESHOLD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"OPERATOR_FILTER_REGISTRY","outputs":[{"internalType":"contract IOperatorFilterRegistry","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"POWER_GROUP_SIZE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"ROYALTY_BP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"SPECIAL_CATEGORIES_VMU_THRESHOLD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"trustedForwarder","type":"address"}],"name":"addForwarder","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"bulkClaimMintReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"count","type":"uint256"},{"internalType":"uint256","name":"term","type":"uint256"}],"name":"bulkClaimRank","outputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"count","type":"uint256"},{"internalType":"uint256","name":"term","type":"uint256"},{"internalType":"uint256","name":"burning","type":"uint256"}],"name":"bulkClaimRankLimited","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"burn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"callClaimMintReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"term","type":"uint256"}],"name":"callClaimRank","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"genesisTs","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"isApex","outputs":[{"internalType":"bool","name":"apex","type":"bool"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"forwarder","type":"address"}],"name":"isTrustedForwarder","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"mintInfo","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"burned","type":"uint256"}],"name":"onTokenBurned","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"ownedTokens","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"powerDown","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"salePrice","type":"uint256"}],"name":"royaltyInfo","outputs":[{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"royaltyAmount","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"specialClassesBurnRates","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"specialClassesCounters","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"specialClassesTokenLimits","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startBlockNumber","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tokenIdCounter","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"vmuCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"xenBurned","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"xenCrypto","outputs":[{"internalType":"contract XENCrypto","name":"","type":"address"}],"stateMutability":"view","type":"function"}]'
@@ -113,109 +114,112 @@ def get_gas_price():
 ## ----------- FUNCTIONS END ----------- ##
 
 
-
-
 ## ----------- BODY OF THE PROGRAM - START (DON'T TOUCH) ----------- ##
 
-if use_automatic_max_term:
-    term = fetch_current_max_term(xen_public_address) # This will fetch the current MAX TERM automatically from XEN smart contract.
-else:
-    term = manual_max_term
-print("------------------------------------------ XENFT CONFIGURATION ------------------------------------------")
-print(f"VMU: {vmu}, TERM: {term}, Max Gas Fee (gwei): {only_claim_if_gas_is_below}, Max Priority Fee (gwei) : {max_priority_fee_per_gas}, Auto retrieve Max Term: {use_automatic_max_term}")
-print(f"Auto-claim XENFT when gas drops below {only_claim_if_gas_is_below} gwei for {claim_when_consecutive_count} consecutive checks, performed at {how_many_seconds_between_checks} second intervals.")
-print("---------------------------------------------------------------------------------------------------------")
+for i in range(1, num_of_xenft_to_mint+1):
 
-time.sleep(how_many_seconds_between_checks)
+    # Uncomment if you want to fetch ABI directly from the contract, otherwise leave commented
+    #xenft_abi = fetch_abi(xenft_contract_address)
+    # Uncomment if you want to fetch ABI directly from the contract, otherwise leave commented
+    #xen_abi = fetch_abi(xen_contract_address)
 
-# Uncomment if you want to fetch ABI directly from the contract, otherwise leave commented
-#xenft_abi = fetch_abi(xenft_contract_address)
-
-# Connect to the contract
-contract = web3.eth.contract(address=xenft_contract_address, abi=xenft_abi)
-
-# Wait for the Ethereum network gas to drop to your minimum acceptable value
-consecutive_count = 0
-while True:
-    maxFeePerGas = get_gas_price()
-    if maxFeePerGas > only_claim_if_gas_is_below:
-        consecutive_count = 0
-        print(f"{get_timestamp()} - Waiting for gas price to drop to {only_claim_if_gas_is_below}. The current gas price: {maxFeePerGas}")
-        time.sleep(how_many_seconds_between_checks)
+    if use_automatic_max_term:
+        term = fetch_current_max_term(xen_contract_address) # This will fetch the current MAX TERM automatically from XEN smart contract.
     else:
-        consecutive_count += 1
-        print(f"{get_timestamp()} - Test {consecutive_count} of {claim_when_consecutive_count} - Gas is below {only_claim_if_gas_is_below}  gwei ({maxFeePerGas})")
-        if consecutive_count == claim_when_consecutive_count:
-            # Once gas at acceptable range, move ahead with transactions
-            print(f"{get_timestamp()} - Ready to claim, the gas price is below {only_claim_if_gas_is_below} gwei for {claim_when_consecutive_count} consecutive times!")
-            break
-        else:
+        term = manual_max_term
+    print()
+    print()
+    print(f"----------------------------------------- MINTING XENFT: {i} of {num_of_xenft_to_mint} -----------------------------------------")
+    print("------------------------------------------ XENFT CONFIGURATION ------------------------------------------")
+    print(f"VMU: {vmu}, TERM: {term}, Max Gas Fee (gwei): {only_claim_if_gas_is_below}, Max Priority Fee (gwei) : {max_priority_fee_per_gas}, Auto retrieve Max Term: {use_automatic_max_term}")
+    print(f"Auto-claim XENFT when gas drops below {only_claim_if_gas_is_below} gwei for {claim_when_consecutive_count} consecutive checks, performed at {how_many_seconds_between_checks} second intervals.")
+    print("---------------------------------------------------------------------------------------------------------")
+
+    # Connect to the contract
+    contract = web3.eth.contract(address=xenft_contract_address, abi=xenft_abi)
+
+    # Wait for the Ethereum network gas to drop to your minimum acceptable value
+    consecutive_count = 0
+    while True:
+        maxFeePerGas = get_gas_price()
+        if maxFeePerGas > only_claim_if_gas_is_below:
+            consecutive_count = 0
+            print(f"{get_timestamp()} - Waiting for gas price to drop to {only_claim_if_gas_is_below}. The current gas price: {maxFeePerGas}")
             time.sleep(how_many_seconds_between_checks)
+        else:
+            consecutive_count += 1
+            print(f"{get_timestamp()} - Test {consecutive_count} of {claim_when_consecutive_count} - Gas is below {only_claim_if_gas_is_below}  gwei ({maxFeePerGas})")
+            if consecutive_count == claim_when_consecutive_count:
+                # Once gas at acceptable range, move ahead with transactions
+                print(f"{get_timestamp()} - Ready to claim, the gas price is below {only_claim_if_gas_is_below} gwei for {claim_when_consecutive_count} consecutive times!")
+                break
+            else:
+                time.sleep(how_many_seconds_between_checks)
 
-eth_cost_in_usd = get_eth_usd_value()
-balance_before_claim = round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6)
-total_account_value = round(eth_cost_in_usd*balance_before_claim,2)
-
-
-
-# Build the transaction
-try:
-    tx = contract.functions.bulkClaimRank(vmu, term).buildTransaction({
-        'from': your_wallet_address,
-        'nonce': web3.eth.getTransactionCount(web3.toChecksumAddress(your_wallet_address)),
-        'maxFeePerGas': web3.toWei(maxFeePerGas, 'gwei'),
-        'maxPriorityFeePerGas': web3.toWei(max_priority_fee_per_gas, 'gwei')
-    })
-    gas = web3.eth.estimateGas(tx)
-    tx['gas'] = gas
+    eth_cost_in_usd = get_eth_usd_value()
+    balance_before_claim = round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6)
+    total_account_value = round(eth_cost_in_usd*balance_before_claim,2)
 
 
-    if web3.eth.getBalance(your_wallet_address) < gas*maxFeePerGas:
-        raise Exception("Not enough Ether in your wallet address to pay for the transaction")
-    else:
-        print(f"{get_timestamp()} - Account balance before XENFT claim: {balance_before_claim} ETH (${total_account_value})")
 
-    # Sign the transaction with your private key
-    signed_tx = web3.eth.account.signTransaction(tx, your_wallet_address_private_key)
+    # Build the transaction
+    try:
+        tx = contract.functions.bulkClaimRank(vmu, term).buildTransaction({
+            'from': your_wallet_address,
+            'nonce': web3.eth.getTransactionCount(web3.toChecksumAddress(your_wallet_address)),
+            'maxFeePerGas': web3.toWei(maxFeePerGas, 'gwei'),
+            'maxPriorityFeePerGas': web3.toWei(max_priority_fee_per_gas, 'gwei')
+        })
+        gas = web3.eth.estimateGas(tx)
+        tx['gas'] = gas
 
-    # Send the transaction to XENFT Smart Contract
-    tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
 
-    print(f"{get_timestamp()} - Transaction successfully submitted!")
+        if web3.eth.getBalance(your_wallet_address) < gas*maxFeePerGas:
+            raise Exception("Not enough Ether in your wallet address to pay for the transaction")
+        else:
+            print(f"{get_timestamp()} - Account balance before XENFT claim: {balance_before_claim} ETH (${total_account_value})")
 
-    # Estimate Cost
-    gas_price = web3.toWei(maxFeePerGas, 'gwei')
-    cost = gas * gas_price
-    cost_in_ether = float(round(web3.fromWei(cost, 'ether'),6))
-    total_cost_in_usd = round(cost_in_ether * eth_cost_in_usd,2)
-    per_vmu_cost = round(total_cost_in_usd/vmu,2)
-    print(f"{get_timestamp()} - Expected XENFT Cost: {cost_in_ether} ETH (${total_cost_in_usd}) or ${per_vmu_cost}/VMU. Current ETH value: ${eth_cost_in_usd}.")
+        # Sign the transaction with your private key
+        signed_tx = web3.eth.account.signTransaction(tx, your_wallet_address_private_key)
 
-    # Print transaction hash URL
-    print(f"{get_timestamp()} - XENFT (vmu:{vmu}, term:{term}) - Successfully Initiated at {maxFeePerGas} gwei. URL: https://etherscan.io/tx/" + str(web3.toHex(tx_hash)))
+        # Send the transaction to XENFT Smart Contract
+        tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
 
-    # Wait for the transaction to be mined
-    # tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
+        print(f"{get_timestamp()} - Transaction successfully submitted!")
 
-    test_count = 0
-    while round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6) == balance_before_claim:
-        test_count = test_count + 1
-        print(f"{get_timestamp()} - ... Waiting for the transaction to be processed! Test: #{test_count}. Current gwei: {get_gas_price()}")
-        time.sleep(how_many_seconds_between_checks+20)
+        # Estimate Cost
+        gas_price = web3.toWei(maxFeePerGas, 'gwei')
+        cost = gas * gas_price
+        cost_in_ether = float(round(web3.fromWei(cost, 'ether'),6))
+        total_cost_in_usd = round(cost_in_ether * eth_cost_in_usd,2)
+        per_vmu_cost = round(total_cost_in_usd/vmu,2)
+        print(f"{get_timestamp()} - Expected XENFT Cost: {cost_in_ether} ETH (${total_cost_in_usd}) or ${per_vmu_cost}/VMU. Current ETH value: ${eth_cost_in_usd}.")
 
-    balance_after_claim = round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6)
-    now = datetime.datetime.now()
-    print(f"{get_timestamp()} - XENFT (vmu:{vmu}, term:{term}) - Successfully Created at {maxFeePerGas} gwei. URL: https://etherscan.io/tx/" + str(web3.toHex(tx_hash)))
-    total_cost = float(round(balance_before_claim - balance_after_claim, 4))
-    total_cost_in_usd = round((total_cost * eth_cost_in_usd),2)
-    per_vmu_cost = round(total_cost_in_usd/vmu, 2)
-    total_account_value = round(eth_cost_in_usd*balance_after_claim,2)
-    print(f"{get_timestamp()} - Actual (final) XENFT Cost: {total_cost} ETH (${total_cost_in_usd}) or ${per_vmu_cost}/VMU. Current ETH value: ${eth_cost_in_usd}.")
-    print(f"{get_timestamp()} - Account balance after XENFT claim: {balance_after_claim} ETH (${total_account_value})")
-    print("-----------------------------------")
+        # Print transaction hash URL
+        print(f"{get_timestamp()} - XENFT (vmu:{vmu}, term:{term}) - Successfully Initiated at {maxFeePerGas} gwei. URL: https://etherscan.io/tx/" + str(web3.toHex(tx_hash)))
 
-    ## ----------- BODY OF THE PROGRAM - END ----------- ##
+        # Wait for the transaction to be mined
+        # tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
 
-except Exception as e:
-    print(f"An error occurred: {e}")
-    print(traceback.format_exc())
+        test_count = 0
+        while round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6) == balance_before_claim:
+            test_count = test_count + 1
+            print(f"{get_timestamp()} - ... Waiting for the transaction to be processed! Test: #{test_count}. Current gwei: {get_gas_price()}")
+            time.sleep(how_many_seconds_between_checks+20)
+
+        balance_after_claim = round(float(web3.fromWei(web3.eth.getBalance(your_wallet_address), 'ether')),6)
+        now = datetime.datetime.now()
+        print(f"{get_timestamp()} - XENFT (vmu:{vmu}, term:{term}) - Successfully Created at {maxFeePerGas} gwei. URL: https://etherscan.io/tx/" + str(web3.toHex(tx_hash)))
+        total_cost = float(round(balance_before_claim - balance_after_claim, 4))
+        total_cost_in_usd = round((total_cost * eth_cost_in_usd),2)
+        per_vmu_cost = round(total_cost_in_usd/vmu, 2)
+        total_account_value = round(eth_cost_in_usd*balance_after_claim,2)
+        print(f"{get_timestamp()} - Actual (final) XENFT Cost: {total_cost} ETH (${total_cost_in_usd}) or ${per_vmu_cost}/VMU. Current ETH value: ${eth_cost_in_usd}.")
+        print(f"{get_timestamp()} - Account balance after XENFT claim: {balance_after_claim} ETH (${total_account_value})")
+        print("-----------------------------------")
+
+        ## ----------- BODY OF THE PROGRAM - END ----------- ##
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        print(traceback.format_exc())
