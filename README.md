@@ -10,7 +10,7 @@ You are solely responsible for any actions taken using this script, and for secu
 This script is provided 'as is,' and the creator makes no warranty, express or implied, of any kind.
 
 # DETAILS
-For more details about how to operate the script, visit: https://xen.pub/mint-collector-xenfts-at-the-lowest-gwei-with-this-python-code/
+For more details about how to operate the script, visit: [https://xen.pub/mint-collector-xenfts-at-the-lowest-gwei-with-this-python-code/](https://xen.pub/blog/mint-collector-xenfts-at-the-lowest-gwei-with-this-python-code/)
 
 - script name    : xenft-creator.py
 - author         : Jozef Jarosciak (Twitter: https://twitter.com/jarosciak)
