@@ -22,6 +22,9 @@ For more details about how to operate the script, visit: [https://xen.pub/mint-c
 # USAGE
 - Enter details in the config section of the xen_bsc.py file. Then verify 3 x times that everything looks good
 
+# VIDEO Instructions
+https://www.youtube.com/watch?v=XAfgy-RgMcA
+
 # HOW CAN YOU HELP?
 - **Donate**: ETH donations are much appreciated: https://xen.pub/donate/
 - **Coders**: Please enhance the below script! Nothing would make me happier than seeing this script being adopted and enhanced by the community.
