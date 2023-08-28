@@ -20,7 +20,7 @@ For more details about how to operate the script, visit: [https://xen.pub/mint-c
 - python vs      : Tested with Python 3.9
 
 # USAGE
-- Enter details in the config section of the xen_bsc.py file. Then verify 3 x times that everything looks good
+- Enter details in the config section of the xenft-creator.py file. Verify that everything looks good!!!
 
 # VIDEO Instructions
 https://www.youtube.com/watch?v=XAfgy-RgMcA
